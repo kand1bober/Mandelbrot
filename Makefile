@@ -1,10 +1,13 @@
 CC = g++
 CFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
+EXECUTABLE = Man
+
 all:
 	
-	$(CC) draw.cpp $(CFLAGS) -o drawer 
+	$(CC) draw.cpp calculate.cpp mandelbrot.cpp $(CFLAGS) -o $(EXECUTABLE)
 
 clean:
-	rm drawer
+	@rm /*.o $(EXECUTABLE)
+
 	
