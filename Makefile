@@ -5,7 +5,7 @@ EXECUTABLE = Man
 
 all:
 	
-	$(CC) draw.cpp calculate.cpp mandelbrot.cpp $(CFLAGS) -o $(EXECUTABLE)
+	$(CC) calculate.cpp mandelbrot.cpp $(CFLAGS) -o $(EXECUTABLE)
 
 clean:
 	@rm /*.o $(EXECUTABLE)
