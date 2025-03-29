@@ -1,24 +1,41 @@
 #include "mandelbrot_header.h"
 
-int CalculateFrame( uint8_t* pixel_frame )
+typedef struct frameinfo
 {
-    int N_max = 200;
-    int max_start_iters = 1000;
-    float r2_max = 4;
+    int max_iters;
+    int N_max;
+    int scale;
+    float r2_max;
+    float x0;
+    float y0;
+    float dx;
+    int x_centre;
+    int y_centre;
 
+} FrameInfo;
 
+int CalculateFrame( uint8_t* pixel_frame )
+{   
+    FrameInfo info = {};
+    info.N_max = 256;
+    info.scale = 100;
+    info.r2_max = 2.25;
+    info.max_iters = 1000000;
+    info.x_centre = 600; // in pixels
+    info.y_centre = 500; // in pixels
+    
     // x, y = coordinates in unit intervals, 1 unit interval = 100 pixels 
-    float x_center = 600, y_center = 500; // in pixels
-    float x0 = 0.1, y0 = 0.1; // in unit intervals      
-    float dx = 0.01;
+    info.x0 = 0.15;
+    info.y0 = 0.13;      // in unit intervals      
+    float dx = 0.000005;
 
-    for( int start_iters = 0; start_iters < max_start_iters; start_iters++, x0 += dx )
+    for( int start_iters = 0; start_iters < info.max_iters; start_iters++, info.x0 += dx )
     {   
-        float x = x0,
-              y = y0;
+        float x = info.x0,
+              y = info.y0;
 
         int N = 0;
-        for( ; N <= N_max; N++ ) // calculate one point 
+        for( ; N <= info.N_max; N++ ) // calculate one point 
         {
             float x2 = x*x;
             float y2 = y*y;
@@ -26,27 +43,27 @@ int CalculateFrame( uint8_t* pixel_frame )
 
             float r2 = x2 + y2; // distance between point and beginning of coordianate plane
 
-            if( r2 >= r2_max ) break;
+            if( r2 >= info.r2_max ) 
+                break;
 
-            x = x2 - y2 + x0;
-            y = 2 * xy + y0;
+            x = x2 - y2 + info.x0;
+            y = 2 * xy + info.y0;
         }
 
         // float I = F(N);
         uint32_t color = 0;
 
-        if( N < N_max ) color = kYellow;
-        else if( N < ( N_max - 100 ) ) color = kPink;
-        else color = kBlack;
+        if( N < info.N_max ) color = kYellow;
+        else if( N < (int)(info.N_max / 2) ) color = kPurple;
+        else color = kPink;
 
-        // pixel_frame[ ( 1920*(int)(y*100 + y_center) + (int)(x*100 + x_center) - ((int)(x*100 + x_center) % 4) ) * 4 ] = (uint8_t)(color >> 24);
-        // pixel_frame[ ( 1920*(int)(y*100 + y_center) + (int)(x*100 + x_center) - ((int)(x*100 + x_center) % 4) ) * 4 + 1 ] = (uint8_t)((color << 8) >> 24);
-        // pixel_frame[ ( 1920*(int)(y*100 + y_center) + (int)(x*100 + x_center) - ((int)(x*100 + x_center) % 4) ) * 4 + 2 ] = (uint8_t)((color << 16) >> 24);
-        // pixel_frame[ ( 1920*(int)(y*100 + y_center) + (int)(x*100 + x_center) - ((int)(x*100 + x_center) % 4) ) * 4 + 3 ] = (uint8_t)((color << 24) >> 24);
-
-        
+        int pix_base_pos = ( 1920 * (int)(y * info.scale + info.y_centre) + (int)(x * info.scale + info.x_centre) - ((int)(x * info.scale + info.x_centre) % 4) ) * 4;
+        pixel_frame[ pix_base_pos ] = (uint8_t)(color >> 24);
+        pixel_frame[ pix_base_pos + 1 ] = (uint8_t)((color << 8) >> 24);
+        pixel_frame[ pix_base_pos + 2 ] = (uint8_t)((color << 16) >> 24);
+        pixel_frame[ pix_base_pos + 3 ] = (uint8_t)((color << 24) >> 24);
     }   
 
     return 0;   
-}   
+}  
 

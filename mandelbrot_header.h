@@ -9,6 +9,7 @@
 #define kBlack (uint32_t)0x000000
 #define kPink  (uint32_t)0xff54accc
 #define kYellow (uint32_t)0xfff700cc
+#define kPurple (uint32_t)0xbb06ff
 
 int CalculateFrame( uint8_t* pixel_frame );
 
