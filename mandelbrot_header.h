@@ -5,6 +5,9 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <stdint.h>
 
+#define kWindowWidth 1920
+#define kWindowHeight 1080
+
 #define kBlue  (uint32_t)0x2a00ff 
 #define kBlack (uint32_t)0x000000
 #define kPink  (uint32_t)0xff54accc
