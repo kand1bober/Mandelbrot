@@ -1,15 +1,15 @@
 #include "mandelbrot_header.h"
+#include <SFML/Window/Keyboard.hpp>
 
-
-int CalculateFrame (uint8_t* pixel_frame)
+int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
 {   
     //------------------------
     float x00 = -2.f;    
     float y00 = -1.25f;
     float x0 = 0.f;    
     float y0 = 0.f;
-    
-    float scale = 400.f;
+
+    static float scale = 400.f;
     float dx = 1/scale;
     float dy = 1/scale;
     int N_max = 256;
@@ -20,12 +20,57 @@ int CalculateFrame (uint8_t* pixel_frame)
 
     uint32_t color = 0;
     //------------------------
+    switch ((int)key_code)
+    {   
+        case kUp:
+        {
+            printf("Up\n");
+            break;
+        }   
+        case kDown:
+        {   
+
+            break;
+        }
+        case kLeft:
+        {
+            
+            break;
+        }
+        case kRight:
+        {
+
+            break;
+        }
+        case kPlus:
+        {
+            scale += 10.f;
+            printf("Plus\n");
+            break;
+        }
+        case kMinus:
+        {
+
+            break;
+        }
+        case kNoKey:
+        {
+            printf("No key\n");
+            break;
+        }
+        default:
+        {
+            printf("Nothing\n");
+            break;
+        }
+    }
+    //-----------------------
 
     y0 = y00;
-    for( int pix_y = y_center; pix_y < kWindowHeight; pix_y++, y0 += dy )
+    for( int pix_y = 0; pix_y < kWindowHeight; pix_y++, y0 += dy )
     {
         x0 = x00;
-        for( int pix_x = x_center; pix_x < kWindowWidth; pix_x++, x0 += dx )
+        for( int pix_x = 0; pix_x < kWindowWidth; pix_x++, x0 += dx )
         {   
             float x = x0;
             float y = y0;
@@ -47,14 +92,13 @@ int CalculateFrame (uint8_t* pixel_frame)
 
             if (N < (N_max - 1)) 
                 color = kBlack;
-            if(N < (N_max / 2))
-                color = kYellow;
-            else 
+            if(N < (100))
                 color = kPink;
+            else 
+                color = kYellow;
 
             int true_y = pix_y;
             int true_x = pix_x;
-
 
             int base_pix_pos = ( kWindowWidth * true_y + true_x ) * 4;
             pixel_frame[base_pix_pos] = (uint8_t)(color >> 24);

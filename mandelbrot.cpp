@@ -13,17 +13,48 @@ int main( int argc, char* argv[] )
     // Create a sprite that will display the texture
     sf::Sprite sprite(texture);
 
+    Keys key_code = kNoKey;
     while ( window.isOpen() )
     {
-        // // calculate new picture 
-        CalculateFrame( pixel_frame );
+        sf::Event event;
+        if(event.type == sf::Event::KeyReleased)
+        {
+            if(event.key.code == sf::Keyboard::Up)
+            {
+                key_code = kUp;
+            }
+            if(event.key.code == sf::Keyboard::Down)
+            {
+                key_code = kDown;
+            }   
+            if(event.key.code == sf::Keyboard::Left)
+            {   
+                key_code = kLeft;
+            }
+            if(event.key.code == sf::Keyboard::Right)
+            {       
+                key_code = kRight;
+            }
+            if(event.key.code == sf::Keyboard::Add)
+            {   
+                key_code = kPlus;
+            }
+            if(event.key.code == sf::Keyboard::Subtract)
+            {   
+                key_code = kMinus;
+            }
+        }
+
+        // calculate new picture 
+        CalculateFrame(pixel_frame, key_code);
         
         //update texture
         sf::Uint8* pixels = pixel_frame;
         texture.update( pixels );
         
         //-------draw---------
-        window.draw( sprite );
+        window.clear(sf::Color::Black); 
+        window.draw(sprite);
         
         window.display();
     }
