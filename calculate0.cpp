@@ -4,8 +4,8 @@
 int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
 {   
     //------------------------
-    float x00 = -2.f;    
-    float y00 = -1.25f;
+    static float x00 = -2.f;    
+    static float y00 = -1.25f;
     float x0 = 0.f;    
     float y0 = 0.f;
 
@@ -14,8 +14,8 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
     float dy = 1/scale;
     int N_max = 256;
     //------------------------
-    int x_center = 300;
-    int y_center = 0;
+    static int x_center = 0;
+    static int y_center = 0;
     float r2_max = 4;
 
     uint32_t color = 0;
@@ -24,43 +24,40 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
     {   
         case kUp:
         {
-            printf("Up\n");
+            y00 += 0.01;
             break;
         }   
         case kDown:
         {   
-
+            y00 -= 0.01;
             break;
         }
         case kLeft:
         {
-            
+            x00 += 0.01;
             break;
         }
         case kRight:
         {
-
+            x00 -= 0.01;
             break;
         }
         case kPlus:
         {
-            scale += 10.f;
-            printf("Plus\n");
+            scale += 100.f;
             break;
         }
         case kMinus:
         {
-
+            scale -= 20.f;
             break;
         }
         case kNoKey:
         {
-            printf("No key\n");
             break;
         }
         default:
         {
-            printf("Nothing\n");
             break;
         }
     }
@@ -97,14 +94,14 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
             else 
                 color = kYellow;
 
-            int true_y = pix_y;
-            int true_x = pix_x;
+            int true_y = pix_y + y_center;
+            int true_x = pix_x + x_center;
 
             int base_pix_pos = ( kWindowWidth * true_y + true_x ) * 4;
-            pixel_frame[base_pix_pos] = (uint8_t)(color >> 24);
-            pixel_frame[base_pix_pos + 1] = (uint8_t)((color << 8) >> 24);
-            pixel_frame[base_pix_pos + 2] = (uint8_t)((color << 16) >> 24);
-            pixel_frame[base_pix_pos + 3] = (uint8_t)((color << 24) >> 24);
+            for(int i = 0; i < 4; i++)
+            {
+                pixel_frame[base_pix_pos + i] = (uint8_t)((color << (8*i)) >> 24);
+            }
         }   
     }
 

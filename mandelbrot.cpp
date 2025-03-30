@@ -14,40 +14,51 @@ int main( int argc, char* argv[] )
     sf::Sprite sprite(texture);
 
     Keys key_code = kNoKey;
+    sf::Clock clock;
+    sf::Event event;
     while ( window.isOpen() )
-    {
-        sf::Event event;
-        if(event.type == sf::Event::KeyReleased)
+    {   
+        float cur_time = clock.restart().asSeconds();
+        float fps = 1.0f / cur_time;
+        printf("%f\n", fps);
+        while (window.pollEvent(event)) 
         {
-            if(event.key.code == sf::Keyboard::Up)
+            if (event.type == sf::Event::Closed) 
             {
-                key_code = kUp;
+                window.close();
             }
-            if(event.key.code == sf::Keyboard::Down)
+            if(event.type == sf::Event::KeyReleased)
             {
-                key_code = kDown;
-            }   
-            if(event.key.code == sf::Keyboard::Left)
-            {   
-                key_code = kLeft;
-            }
-            if(event.key.code == sf::Keyboard::Right)
-            {       
-                key_code = kRight;
-            }
-            if(event.key.code == sf::Keyboard::Add)
-            {   
-                key_code = kPlus;
-            }
-            if(event.key.code == sf::Keyboard::Subtract)
-            {   
-                key_code = kMinus;
+                switch (event.key.code) 
+                {
+                    case sf::Keyboard::Up:
+                        key_code = kUp;
+                        break;
+                    case sf::Keyboard::Down:
+                        key_code = kDown;
+                        break;
+                    case sf::Keyboard::Left:
+                        key_code = kLeft;
+                        break;
+                    case sf::Keyboard::Right:
+                        key_code = kRight;
+                        break;
+                    case sf::Keyboard::Add:
+                        key_code = kPlus;
+                        break;
+                    case sf::Keyboard::Subtract:
+                        key_code = kMinus;
+                        break;
+                    default:
+                        key_code = kNoKey;
+                        break;
+                }
             }
         }
 
         // calculate new picture 
         CalculateFrame(pixel_frame, key_code);
-        
+        key_code = kNoKey;
         //update texture
         sf::Uint8* pixels = pixel_frame;
         texture.update( pixels );

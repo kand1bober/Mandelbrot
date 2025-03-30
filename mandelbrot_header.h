@@ -8,7 +8,7 @@
 #define kWindowWidth 1920
 #define kWindowHeight 1080
 
-typedef enum keys
+typedef enum
 {   
     kNoKey = 0,
     kUp,
