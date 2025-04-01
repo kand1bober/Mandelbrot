@@ -3,7 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <stdint.h>
+#include <xmmintrin.h>
 
 #define kWindowWidth 1920
 #define kWindowHeight 1080

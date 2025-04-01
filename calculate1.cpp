@@ -14,7 +14,7 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
     float dy = 1/scale;
     int n_max = 256;
     //------------------------
-    float r2_max = 2;
+    float r2_max = 4;
 
     uint32_t color[4] = {0};
     //------------------------
@@ -85,7 +85,7 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
                 for(int i = 0; i < 4; i++) { if (r2[i] <= r2_max) cmp[i] = 1; }
 
                 int mask = 0;
-                for(int i = 0; i < 4; i++) { mask |= (cmp[i] << i); }
+                for(int i = 0; i < 4; i++) { mask |= (!!cmp[i] << i); }
                 if( !mask ) break;
 
                 for(int i = 0; i < 4; i++) { N[i] = N[i] + cmp[i]; }
@@ -93,7 +93,7 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
                 for(int i = 0; i < 4; i++) { y[i] = 2 * xy[i] + y_0_arr[i]; } 
                        
             }
-
+    
             int base_pix_pos = 0;
             for(int i = 0; i < 4; i++)
             {
