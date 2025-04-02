@@ -137,7 +137,8 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
                 float x2[4] = {}; mm_mul_ps(x2, x, x);
                 float y2[4] = {}; mm_mul_ps(y2, y, y);
                 float xy[4] = {}; mm_mul_ps(xy, x, y);   
-                float r2[4] = {}; mm_mul_ps(r2, x, x); 
+    
+                float r2[4] = {}; mm_add_ps(r2, x2, y2); 
 
                 int cmp[4] = {0};
                 mm_cmple_ps(cmp, r2, r2_max );

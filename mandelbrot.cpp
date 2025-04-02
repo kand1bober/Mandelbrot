@@ -27,31 +27,35 @@ int main( int argc, char* argv[] )
             {
                 window.close();
             }
-            if(event.type == sf::Event::KeyReleased)
+            else    
             {
-                switch (event.key.code) 
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
                 {
-                    case sf::Keyboard::Up:
-                        key_code = kUp;
-                        break;
-                    case sf::Keyboard::Down:
-                        key_code = kDown;
-                        break;
-                    case sf::Keyboard::Left:
-                        key_code = kLeft;
-                        break;
-                    case sf::Keyboard::Right:
-                        key_code = kRight;
-                        break;
-                    case sf::Keyboard::Add:
-                        key_code = kPlus;
-                        break;
-                    case sf::Keyboard::Subtract:
-                        key_code = kMinus;
-                        break;
-                    default:
-                        key_code = kNoKey;
-                        break;
+                    key_code = kUp;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                {
+                    key_code = kDown;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                {
+                    key_code = kLeft;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                {
+                    key_code = kRight;
+                }
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
+                {
+                    key_code = kPlus;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
+                {
+                    key_code = kMinus;
+                }
+                else
+                {
+                    key_code = kNoKey;
                 }
             }
         }

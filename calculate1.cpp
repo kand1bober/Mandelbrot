@@ -91,7 +91,6 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
                 for(int i = 0; i < 4; i++) { N[i] = N[i] + cmp[i]; }
                 for(int i = 0; i < 4; i++) { x[i] = x2[i] - y2[i] + x_0_arr[i]; }
                 for(int i = 0; i < 4; i++) { y[i] = 2 * xy[i] + y_0_arr[i]; } 
-                       
             }
     
             int base_pix_pos = 0;
