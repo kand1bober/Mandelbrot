@@ -21,11 +21,14 @@ typedef enum
     kMinus, 
 } Keys;
 
-#define kBlue  (uint32_t)0x2a00ff 
 #define kBlack (uint32_t)0x000000
 #define kPink  (uint32_t)0xff54accc
-#define kYellow (uint32_t)0xfff700cc
-#define kPurple (uint32_t)0xbb06ff
+
+#define kRed (uint32_t)0xff0000ff
+#define kYellow (uint32_t)0xffff00ff
+#define kOrange1 (uint32_t)0xff6200ff
+#define kOrange2 (uint32_t)0xff9b00ff
+
 
 int CalculateFrame( uint8_t* pixel_frame, Keys key_code );
 

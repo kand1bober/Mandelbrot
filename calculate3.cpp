@@ -59,9 +59,8 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
     int n_max = 256;
     int mask = 0;
     //------------------------
-    __m128 r2_max = _mm_set_ps1(2.f);
+    __m128 r2_max = _mm_set_ps1(4.f);
 
-    uint32_t color[4] = {0};
     //------------------------
     switch ((int)key_code)
     {   
@@ -124,19 +123,21 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
                 y = _mm_add_ps(_mm_mul_ps(xy, const_two), y_0_arr);
             }
     
-            int base_pix_pos = 0;
 
-            int N_ptr[4] = {0};
+            uint32_t N_ptr[4] = {0}; 
             _mm_store_si128((__m128i*)N_ptr, N);
 
+            int k = 0;
+            int base_pix_pos = 0;
+            uint32_t color[4] = {kYellow, kYellow, kYellow, kYellow};
+            uint32_t color_mask = 0xff00ffff;
+            uint32_t color_mod = 0x00000000;
             for(int i = 0; i < 4; i++)
             {   
-                if (N_ptr[3-i] < (n_max - 1)) 
-                    color[i] = kBlack;
-                else if (N_ptr[i] < (100))
-                    color[i] = kPink;
-                else 
-                    color[i] = kYellow;
+                k = 3 - i;
+                color_mod = (((4*N_ptr[k]) << 16) & 0x00ff0000); // setting 1st byte 
+                color[i] &= 0xff00ffff; // clear space for insertion
+                color[i] |= color_mod; // insert 1st byte
 
                 base_pix_pos = ( kWindowWidth * yi + xi + i ) * 4;
 
@@ -149,5 +150,5 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
     }
 
     return 0;   
-}  
+}   
 
