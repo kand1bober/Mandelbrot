@@ -5,7 +5,21 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 #include <xmmintrin.h>
+#include <immintrin.h>
+#include <x86intrin.h>
+#pragma intrinsic(__rdtsc)
+
+#ifdef tests    
+    #define TESTS(expr) expr 
+    #define NO_TESTS(expr) 
+#else 
+    #define TESTS(expr)
+    #define NO_TESTS(expr) expr
+#endif 
+
 
 #define kWindowWidth 1920
 #define kWindowHeight 1080
@@ -21,15 +35,29 @@ typedef enum
     kMinus, 
 } Keys;
 
-#define kBlack (uint32_t)0x000000
-#define kPink  (uint32_t)0xff54accc
+typedef enum
+{
+    kYes= 1,
+    kNo = 2,
+} Condition;
 
-#define kRed (uint32_t)0xff0000ff
+typedef struct
+{
+    Condition graphics;
+    Condition fps;
+    int frames;
+    int runs;
+}ProgConfig;
+
+#define kBlack  (uint32_t)0x000000
+#define kRed    (uint32_t)0xff0000ff
 #define kYellow (uint32_t)0xffff00ff
-#define kOrange1 (uint32_t)0xff6200ff
-#define kOrange2 (uint32_t)0xff9b00ff
+#define kBlue   (uint32_t)0x0000ff
+#define kGreen  (uint32_t)0x00ff0000
+#define kAzure  (uint32_t)0x00ffffff
+#define kPink   (uint32_t)0xff00ff00
 
-
+int GetArgs(int argc, char* argv[], ProgConfig* config);
 int CalculateFrame( uint8_t* pixel_frame, Keys key_code );
 
 #endif 

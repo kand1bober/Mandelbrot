@@ -1,5 +1,5 @@
 #include "mandelbrot_header.h"
-
+    
 int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
 {   
     //------------------------
@@ -11,83 +11,87 @@ int CalculateFrame (uint8_t* pixel_frame, Keys key_code)
     static float scale = 400.f;
     float dx = 1/scale;
     float dy = 1/scale;
-    int n_max = 256;
+    uint64_t n_max = 256;
     int mask = 0;
     //------------------------
-    __m128 r2_max = _mm_set_ps1(4.f);
-    uint32_t N_ptr[4] = {0};
+    __m256 r2_max = _mm256_set1_ps(4.f);
+    uint32_t N_ptr[8] = {0};
     //------------------------
     int k = 0;
     int base_pix_pos = 0;
-    uint32_t color[4] = {0};
+    uint32_t color[8] = {0};
     uint32_t color_mod = 0x00000000;
     //------------------------
-    switch ((int)key_code)
-    {   
-        case kUp:
-            y00 += 0.01;
-            break;
-        case kDown:  
-            y00 -= 0.01;
-            break;
-        case kLeft:
-            x00 += 0.01;
-            break;
-        case kRight:
-            x00 -= 0.01;
-            break;
-        case kPlus:
-            scale += 100.f;
-            break;
-        case kMinus:
-            scale -= 100.f;
-            break;
-        case kNoKey:
-            break;
-        default:
-            break;
-    }
+
+    NO_TESTS
+    (
+        switch ((int)key_code)
+        {   
+            case kUp:
+                y00 += 0.01;
+                break;
+            case kDown:  
+                y00 -= 0.01;
+                break;
+            case kLeft:
+                x00 += 0.01;
+                break;
+            case kRight:
+                x00 -= 0.01;
+                break;
+            case kPlus:
+                scale += 100.f;
+                break;
+            case kMinus:
+                scale -= 100.f;
+                break;
+            case kNoKey:
+                break;
+            default:
+                break;
+        }
+    )
     //-----------------------
 
     y0 = y00;
     for( int yi = 0; yi < kWindowHeight; yi += 1, y0 += dy )
     {
         x0 = x00;
-        for( int xi = 0; xi < kWindowWidth - 4; xi += 4, x0 += 4*dx )
+        for( int xi = 0; xi < kWindowWidth - 8; xi += 8, x0 += 8*dx )
         {   
-            __m128 x_0_arr = _mm_set_ps(x0, x0 + dx, x0 + 2*dx, x0 + 3*dx);
-            __m128 y_0_arr = _mm_set_ps1(y0);
+            __m256 x_0_arr = _mm256_set_ps(x0, x0 + dx, x0 + 2*dx, x0 + 3*dx, x0+4*dx, x0+5*dx, x0+6*dx, x0+7*dx);
+            __m256 y_0_arr = _mm256_set1_ps(y0);
 
-            __m128 x = x_0_arr;
-            __m128 y = y_0_arr;            
+            __m256 x = x_0_arr;
+            __m256 y = y_0_arr;            
         
-            __m128i N = _mm_set1_epi32(0);          //integer
+            __m256i N = _mm256_set1_epi32(0);          //integer
             for (int n = 0; n < n_max; n++)
             {
-                __m128 x2 = _mm_mul_ps(x, x);
-                __m128 y2 = _mm_mul_ps(y, y);
-                __m128 xy = _mm_mul_ps(x, y);
-                __m128 r2 = _mm_add_ps(x2, y2);
+                __m256 x2 = _mm256_mul_ps(x, x);
+                __m256 y2 = _mm256_mul_ps(y, y);
+                __m256 xy = _mm256_mul_ps(x, y);
+                __m256 r2 = _mm256_add_ps(x2, y2);
 
-                __m128 cmp = _mm_cmple_ps(r2, r2_max);
+                __m256 cmp = _mm256_cmp_ps(r2, r2_max, _CMP_LE_OS);
                 
                 mask = 0;
-                mask = _mm_movemask_ps(cmp);
+                mask = _mm256_movemask_ps(cmp);
                 if(!mask) break;
 
-                N = _mm_sub_epi32(N, _mm_castps_si128(cmp));
+                N = _mm256_sub_epi32(N, _mm256_castps_si256(cmp));
 
-                x = _mm_add_ps(_mm_sub_ps(x2, y2), x_0_arr);
+                x = _mm256_add_ps(_mm256_sub_ps(x2, y2), x_0_arr);
 
-                __m128 const_two = _mm_set_ps1(2.f);
-                y = _mm_add_ps(_mm_mul_ps(xy, const_two), y_0_arr);
+                __m256 const_two = _mm256_set1_ps(2.f);
+                y = _mm256_add_ps(_mm256_mul_ps(xy, const_two), y_0_arr);
             }
     
-            _mm_store_si128((__m128i*)N_ptr, N);
+            _mm256_store_si256((__m256i*)N_ptr, N);
             
-            for(int i = 0; i < 4; i++)
+            for(int i = 0; i < 8; i++)
             {   
-                k = 3 - i;
+                k = 7 - i;
                 if (N_ptr[k] <= 20)
                 {
                     color[i] = kBlack;

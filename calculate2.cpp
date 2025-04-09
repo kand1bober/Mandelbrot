@@ -1,41 +1,5 @@
 #include "mandelbrot_header.h"
 
-/* *************** INTEGERS *********************
-*
-* __m128i _mm_add_epi32 (__m128i a, __m128i b)      //add 4 packed 32-bit integer numbers 
-* __m128i _mm_add_epi64 (__m128i a, __m128i b)      //add 4 packed 64-bit integer numbers 
-*
-* __m256i _mm256_add_epi32 (__m256i a, __m256i b)   //add 8 packed 32-bit integer numbers 
-* __m256i _mm256_add_epi64 (__m256i a, __m256i b)   //add 8 packed 64-bit integer numbers
-*
-* __m128i _mm_sub_epi32 (__m128i a, __m128i b)      //sub 4 packed 32-bit integer numbers 
-* __m128i _mm_sub_epi64 (__m128i a, __m128i b)      //sub 4 packed 64-bit integer numbers 
-*
-* __m256i _mm256_sub_epi32 (__m256i a, __m256i b)   //sub 8 packed 32-bit integer numbers
-* __m256i _mm256_sub_epi64 (__m256i a, __m256i b)   //sub 8 packed 32-bit integer numbers
-*
-******************* FLOATS **********************
-*
-* __m128 _mm_mul_ps (__m128 a, __m128 b)            //Multiply packed single-precision (32-bit) floating-point elements in a and b
-* __m128 _mm_add_ps (__m128 a, __m128 b)            //add Add packed single-precision (32-bit) floating-point elements in a and b
-* 
-* __m128 _mm_sub_ps (__m128 a, __m128 b)            //Subtract packed single-precision (32-bit) floating-point elements in b from packed single-precision (32-bit) floating-point elements in a
-* 
-* __m128 _mm_set_ps (float e3, float e2, float e1, float e0) //Set packed single-precision (32-bit) floating-point elements in dst with the supplied values
-* __m128 _mm_set_ps1 (float a)                      //Broadcast single-precision (32-bit) floating-point value a to all elements of dst
-* 
-* int _mm_movemask_ps (__m128 a)                    //  FOR j := 0 to 3
-*                                                                i := j*32
-*                                                                IF a[i+31]
-*                                                                    dst[j] := 1
-*                                                                ELSE
-*                                                                    dst[j] := 0   
-*
-* __m128 _mm_cmple_ps (__m128 a, __m128 b)          // FOR j := 0 to 3
-*                                                               i := j*32
-*                                                               dst[i+31:i] := ( a[i+31:i] <= b[i+31:i] ) ? 0xFFFFFFFF : 0
-************************************************/
-
 inline void mm_set_ps(float* res, float f0, float f1, float f2, float f3) { res[0] = f0; res[1] = f1; res[2] = f2; res[3] = f3; }
 
 inline void mm_set_ps1(float* res, float f) { for(int i = 0; i < 4; i++) {res[i] = f;} }
@@ -50,11 +14,6 @@ inline void mm_sub_ps(float* res, float* a, float* b) { for(int i = 0; i < 4; i+
 
 inline void mm_mul_ps(float* res, float* a, float* b) { for(int i = 0; i < 4; i++) {res[i] = a[i] * b[i];} }
 
-/* 
-* differense between my mm_cmple_ps and mm_movemask_ps and original ones:
-* they set the youngest bits of each byte of res, 
-* unlike the orig. one, which set oldest bits of same bytes  
-*/
 inline void mm_cmple_ps(int* cmp, float* a, float* b )
 { 
     for(int i = 0; i < 4; i++) 
