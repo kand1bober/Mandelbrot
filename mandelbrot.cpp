@@ -3,7 +3,6 @@
 int main(int argc, char* argv[])
 {
     ProgConfig config = {};
-    config.graphics = kYes;
     GetArgs(argc, argv, &config );
 
     uint8_t* pixel_frame = (uint8_t* )malloc( kWindowHeight * kWindowWidth * 4 );
@@ -86,38 +85,24 @@ int main(int argc, char* argv[])
         CalculateFrame(pixel_frame, key_code);
         key_code = kNoKey;
 
-        // switch((int)config.graphics)
-        // {
-        //     case kYes:
-        //     {
-        //         // update texture
-        //         sf::Uint8* pixels = pixel_frame;
-        //         texture.update( pixels );
-                
-        //         //-------draw---------
-        //         window.clear(sf::Color::Black); 
-        //         window.draw(sprite);
-        //         window.display();
-        //         break;
-        //     }
-
-        //     case kNo:
-        //         break;
+        GRAPHICS
+        (
+            // update texture
+            sf::Uint8* pixels = pixel_frame;
+            texture.update( pixels );
             
-        //     default:
-        //     {
-        //         printf("variable 'graphics' shouldn't be touched\n");
-        //         exit(1);
-        //         break;
-        //     }
-        // }
+            //-------draw---------
+            window.clear(sf::Color::Black); 
+            window.draw(sprite);
+            window.display();
+        )
     }
     ticks_end = __rdtsc();
     ticks_res = ticks_end - ticks_start;
 
     TESTS
     (
-        printf("%d run: %lu ticks\n", runs_counter, ticks_res );
+            printf("%d run: %lu ticks per frame\n", runs_counter, ticks_res / config.frames );
         }
     )
 
@@ -126,19 +111,12 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+
 int GetArgs(int argc, char* argv[], ProgConfig* config)
 {
     for(int i = 1; i < argc; i++)
     {
-        if (!strcmp(argv[i], "-graphics"))
-        {
-            config->graphics = kYes;
-        }
-        else if (!strcmp(argv[i], "-no-graphics"))
-        {
-            config->graphics = kNo;
-        }
-        else if (!strcmp(argv[i], "-frames"))
+        if (!strcmp(argv[i], "-frames"))
         {
             i++;
             config->frames = atoi(argv[i]);

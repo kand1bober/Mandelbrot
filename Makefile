@@ -13,6 +13,8 @@ OPTIMIZATION_4 := 1
 
 TEST		   := 1
 
+GRAPHICS 	   := 0
+
 ifeq ($(OPTIMIZATION_0), 1)
 	CALC_OPTION = calculate0.cpp
 endif
@@ -36,6 +38,11 @@ endif
 ifeq ($(TEST), 1)
 	CFLAGS += -Dtests
 endif
+
+ifeq ($(GRAPHICS), 1)
+	CFLAGS += -Dgraphics
+endif
+
 
 all:
 	$(CC) $(CALC_OPTION) mandelbrot.cpp $(CFLAGS) -o $(EXECUTABLE)

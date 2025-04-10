@@ -12,6 +12,7 @@
 #include <x86intrin.h>
 #pragma intrinsic(__rdtsc)
 
+
 #ifdef tests    
     #define TESTS(expr) expr 
     #define NO_TESTS(expr) 
@@ -20,6 +21,11 @@
     #define NO_TESTS(expr) expr
 #endif 
 
+#ifdef graphics
+    #define GRAPHICS(expr) expr
+#else  
+    #define GRAPHICS(expr) 
+#endif
 
 #define kWindowWidth 1920
 #define kWindowHeight 1080
@@ -43,8 +49,6 @@ typedef enum
 
 typedef struct
 {
-    Condition graphics;
-    Condition fps;
     int frames;
     int runs;
 }ProgConfig;
