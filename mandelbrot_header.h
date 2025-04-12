@@ -13,7 +13,7 @@
 #pragma intrinsic(__rdtsc)
 
 
-#ifdef tests    
+#ifdef TESTS   
     #define TESTS(expr) expr 
     #define NO_TESTS(expr) 
 #else 
@@ -21,7 +21,7 @@
     #define NO_TESTS(expr) expr
 #endif 
 
-#ifdef graphics
+#ifdef GRAPHICS
     #define GRAPHICS(expr) expr
 #else  
     #define GRAPHICS(expr) 

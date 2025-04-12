@@ -5,15 +5,15 @@ CALC_OPTION = calculate0.cpp
 
 EXECUTABLE = Man
 
-OPTIMIZATION_0 := 0
+OPTIMIZATION_0 := 1
 OPTIMIZATION_1 := 0
 OPTIMIZATION_2 := 0
 OPTIMIZATION_3 := 0
-OPTIMIZATION_4 := 1
+OPTIMIZATION_4 := 0
 
-TEST		   := 0
+TEST		   := 1
 
-GRAPHICS 	   := 1
+GRAPHICS 	   := 0
 
 ifeq ($(OPTIMIZATION_0), 1)
 	CALC_OPTION = calculate0.cpp
@@ -36,11 +36,11 @@ ifeq ($(OPTIMIZATION_4), 1)
 endif
 
 ifeq ($(TEST), 1)
-	CFLAGS += -Dtests
+	CFLAGS += -DTESTS
 endif
 
 ifeq ($(GRAPHICS), 1)
-	CFLAGS += -Dgraphics
+	CFLAGS += -DGRAPHICS
 endif
 
 
